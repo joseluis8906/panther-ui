@@ -9,12 +9,13 @@ class Custom : DrawingArea {
 	public override bool draw (Cairo.Context ctx) {
 		ctx.set_tolerance (0.1);
 		ctx.save ();
-		
+
 		var palette = Palette();
-		
+
 		Context context = new Context(ctx);
 		string[] values = {"50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "A100", "A200", "A400", "A700"};
 		var i = 0;
+
 		foreach (string it in values) {
 			context.addRect(Rect(){origin = Point() {x = 0, y = i * 50}, size = Size(){width = 50, height = 50}});
 			context.fillAndStroke(palette.red.get(it), palette.red.get(it), 1);
@@ -85,20 +86,18 @@ public class CairoSample : Gtk.Window {
         this.destroy.connect (Gtk.main_quit);
 		this.set_default_size (1024, 720);
 		this.maximize();
-
-		var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 		var custom = new Custom();
-		box.pack_start(custom, false, false, 0);
+		var scrolled = new Gtk.ScrolledWindow(null, null);
+		scrolled.add(custom);
+		scrolled.set_policy (Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC);
 
-        this.add(box);
+        this.add(scrolled);
     }
 
     static int main (string[] args) {
         Gtk.init (ref args);
-
         var cairo_sample = new CairoSample ();
         cairo_sample.show_all ();
-
         Gtk.main ();
 
         return 0;
